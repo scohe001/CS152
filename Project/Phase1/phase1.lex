@@ -30,7 +30,7 @@ OTHER		;|:|,|\(|\)|\[|\]|:=
 
 DIGIT		[0-9]
 LETTER		[a-zA-Z]
-IDENTIFIER	{LETTER}+({LETTER}|{DIGIT})*(_({LETTER}|{DIGIT})+)*
+IDENTIFIER	{LETTER}+({LETTER}|{DIGIT})*(_*({LETTER}|{DIGIT})+)*
 NUM_IDENTIFIER	({DIGIT}|_)+({LETTER}|{DIGIT})*(_({LETTER}|{DIGIT})+)*
 US_IDENTIFIER	{LETTER}+({LETTER}|{DIGIT})*(_({LETTER}|{DIGIT})+)*_
 FLOAT		{DIGIT}*\.{DIGIT}+
@@ -48,7 +48,7 @@ WHITESPACE	[ \n\t]
 } */
 
 %%
-##.* /*comment (doesn't capture newline at the end)*/ ;
+##.* /*comment (doesn't capture newline at the end)*/ num_chars += strlen(yytext);
 
 {RESERVED} 	printf("%s\n", reserved[yytext].c_str()); num_chars += strlen(yytext);
 {ARITHMETIC} 	printf("%s\n", arithmetic[yytext].c_str()); num_chars += strlen(yytext);
@@ -67,19 +67,19 @@ WHITESPACE	[ \n\t]
 
 {NUM_IDENTIFIER} {
 	printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter",
-		num_lines, num_chars++, yytext);
+		1 + num_lines, 1 + num_chars++, yytext);
 	exit(0);
 }
 
 {US_IDENTIFIER} {
 	printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n",
-		num_lines, num_chars++, yytext);
+		1 + num_lines, 1 + num_chars++, yytext);
 	exit(0);
 }
 
 . {
 	printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", 
-		num_lines, num_chars++, yytext);
+		1 + num_lines, 1 + num_chars++, yytext);
 	exit(0);
 }
 
