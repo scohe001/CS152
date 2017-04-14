@@ -3,7 +3,7 @@
 OBJS	= bison.o lex.o main.o
 
 CC	= g++
-CFLAGS	= -std=c++11 -g -Wall -ansi -pedantic
+CFLAGS	= -std=c++11 -g
 
 minl:		$(OBJS)
 		$(CC) $(CFLAGS) $(OBJS) -o minl -lfl

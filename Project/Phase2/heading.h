@@ -10,3 +10,4 @@ using namespace std;
 #include <cmath>
 #include <cstdlib>
 #include <map>
+#include "tok.h"

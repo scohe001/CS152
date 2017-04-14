@@ -18,10 +18,10 @@
 #include <string>
 %}
 
-	std::map<std::string, std::string> reserved;
-	std::map<std::string, std::string> arithmetic;
-	std::map<std::string, std::string> comparison;
-	std::map<std::string, std::string> other;
+	std::map<std::string, int> reserved;
+	std::map<std::string, int> arithmetic;
+	std::map<std::string, int> comparison;
+	std::map<std::string, int> other;
 	int num_lines = 0, num_chars = 0;
 
 RESERVED	function|beginparams|endparams|beginlocals|endlocals|beginbody|endbody|endbody|integer|array|of|if|then|endif|else|while|do|beginloop|endloop|continue|read|write|and|or|not|true|false|return
@@ -51,14 +51,14 @@ WHITESPACE	[ \n\t]
 %%
 ##.* /*comment (doesn't capture newline at the end)*/ num_chars += strlen(yytext);
 
-{RESERVED} 	printf("%s\n", reserved[yytext].c_str()); num_chars += strlen(yytext);
-{ARITHMETIC} 	printf("%s\n", arithmetic[yytext].c_str()); num_chars += strlen(yytext);
-{COMPARISON}	printf("%s\n", comparison[yytext].c_str()); num_chars += strlen(yytext);
-{OTHER}		printf("%s\n", other[yytext].c_str()); num_chars += strlen(yytext);;
+{RESERVED} 	num_chars += strlen(yytext); return reserved[yytext];
+{ARITHMETIC} 	num_chars += strlen(yytext); return arithmetic[yytext];
+{COMPARISON}	num_chars += strlen(yytext); return comparison[yytext];
+{OTHER}		num_chars += strlen(yytext); return other[yytext];
 
-{DIGIT}+	printf("NUMBER %d\n", atoi(yytext)); num_chars += strlen(yytext);
+{DIGIT}+	yylval.int_val = atoi(yytext); num_chars += strlen(yytext); return NUMBER;
 
-{IDENTIFIER}	printf("IDENT %s\n", yytext); num_chars += strlen(yytext);
+{IDENTIFIER}	cout << "Identifier: " << yytext << endl; yylval.str_val = new std::string(yytext); num_chars += strlen(yytext); return IDENT;
 
 
 
